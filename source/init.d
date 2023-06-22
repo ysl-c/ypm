@@ -68,7 +68,13 @@ void YPM_Init(string[] args) {
 		if (input != "") {
 			project["core"] = input;
 		}
+	}
 
+	if ("libs" !in project.objectNoRef) {
+		project["libs"] = new JSONValue[](0);
+	}
+
+	if (!exists(".ypm/core.ysl")) {
 		writefln("Downloading core...");
 		bool success = true;
 		auto url = format(
@@ -89,10 +95,6 @@ void YPM_Init(string[] args) {
 		if (success) {
 			writeln("Done");
 		}
-	}
-
-	if ("libs" !in project.objectNoRef) {
-		project["libs"] = new JSONValue[](0);
 	}
 
 	if (!exists(".ypm/std.ysl")) {
