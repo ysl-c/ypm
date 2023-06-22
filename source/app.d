@@ -4,13 +4,15 @@ import std.stdio;
 import std.string;
 import ypm.init;
 import ypm.build;
+import ypm.upgrade;
 
 const string appHelp = "
 YSL-C package manager, made by MESYETI
 ======================================
 Commands:
-	init - makes a new YSL-C project
-	build - builds the YSL-C project
+	init    - makes a new YSL-C project
+	build   - builds the YSL-C project
+	upgrade - updates builtin libaries and external dependencies
 
 Flags:
 	init:
@@ -32,6 +34,10 @@ int main(string[] args) {
 		}
 		case "build": {
 			YPM_Build(args[2 .. $]);
+			break;
+		}
+		case "upgrade": {
+			YPM_Upgrade(args[2 .. $]);
 			break;
 		}
 		default: {
