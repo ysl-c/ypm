@@ -45,7 +45,7 @@ void YPM_Build(string[] args) {
 
 	auto project = readText("ypm.json").parseJSON();
 
-	writeln("Starting build for project %s", project["name"].str);
+	writefln("Starting build for project %s", project["name"].str);
 
 	if (!exists("source/main.ysl")) {
 		writeln("Nothing to be done");

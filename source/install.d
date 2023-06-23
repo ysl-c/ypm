@@ -47,4 +47,6 @@ void YPM_Install(string[] args) {
 	else {
 		writeln("Use a http git URL");
 	}
+
+	std.file.write("ypm.json", project.toPrettyString());
 }
