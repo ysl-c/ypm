@@ -21,6 +21,10 @@ void YPM_Upgrade(string[] args) {
 		"https://raw.githubusercontent.com/ysl-c/core/main/%s.ysl",
 		project["core"].str
 	);
+
+	if (exists(".ypm/core.ysl")) {
+		std.file.remove(".ypm/core.ysl");
+	}
 	
 	try {
 		std.file.write(".ypm/core.ysl", get(url));
@@ -38,6 +42,10 @@ void YPM_Upgrade(string[] args) {
 
 	writeln("Downloading STD library");
 
+	if (exists(".ypm/std.ysl")) {
+		std.file.remove(".ypm/std.ysl");
+	}
+	
 	url = "https://raw.githubusercontent.com/ysl-c/std/main/std.ysl";
 	std.file.write(".ypm/std.ysl", get(url));
 	writeln("Done");
