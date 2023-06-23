@@ -5,7 +5,9 @@ import std.json;
 import std.path;
 import std.stdio;
 import std.string;
+import std.process;
 import std.net.curl;
+import core.stdc.stdlib;
 
 const string exampleMain =
 "%include \"std.ysl\"
@@ -72,6 +74,43 @@ void YPM_Init(string[] args) {
 
 	if ("libs" !in project.objectNoRef) {
 		project["libs"] = new JSONValue[](0);
+	}
+	else {
+		foreach (ref dependency ; project["libs"].array) {
+			if (args[0].startsWith("http")) {
+				writeln("Installing library %s", baseName(dependency.str));
+				
+				auto res = executeShell(
+					format(
+						"git clone %s .ypm/%s", dependency.str,
+						baseName(dependency.str)
+					)
+				);
+
+				if (res.status != 0) {
+					stderr.writeln(res.output);
+					stderr.writeln("Failed to install library");
+					exit(1);
+				}
+
+				res = executeShell(
+					format(
+						"cd .ypm/%s && ypm init", baseName(dependency.str)
+					)
+				);
+
+				if (res.status != 0) {
+					stderr.writeln(res.output);
+					stderr.writeln("Failed to initialise library");
+					exit(1);
+				}
+			}
+			else {
+				stderr.writefln(
+					"Dependency '%s' is not a http git url", dependency.str
+				);
+			}
+		}
 	}
 
 	if (!exists(".ypm/core.ysl")) {

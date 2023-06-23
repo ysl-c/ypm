@@ -5,20 +5,29 @@ import std.string;
 import ypm.init;
 import ypm.build;
 import ypm.upgrade;
+import ypm.install;
 
 const string appHelp = "
 YSL-C package manager, made by MESYETI
 ======================================
 Commands:
-	init    - makes a new YSL-C project
-	build   - builds the YSL-C project
-	upgrade - updates builtin libaries and external dependencies
+	init                   - creates or initialises a YPM project
+	build                  - builds the YPM project
+	upgrade                - updates builtin libaries and external dependencies
+	install (git http url) - installs a library to this project
 
 Flags:
 	init:
 		none
 	build:
 		-nc / --no-clean : don't clean up after building
+	upgrade:
+		none
+	install:
+		none
+
+Notes:
+	for some reason upgrade doesn't always work on the builtin libraries
 ";
 
 int main(string[] args) {
@@ -38,6 +47,10 @@ int main(string[] args) {
 		}
 		case "upgrade": {
 			YPM_Upgrade(args[2 .. $]);
+			break;
+		}
+		case "install": {
+			YPM_Install(args[2 .. $]);
 			break;
 		}
 		default: {
