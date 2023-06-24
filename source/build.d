@@ -10,9 +10,7 @@ import core.stdc.stdlib;
 
 private string IncludeArgs(string path) {
 	string ret;
-	auto   project = readText(path ~ "/ypm.json").parseJSON();
-
-	writeln(path);
+	auto   project = readText(path ~ "/ypm.json").parseJSON();s
 
 	foreach (ref dependency ; project["libs"].array) {
 		ret ~= format(" -i %s/.ypm/%s/source", path, dependency.str.baseName());
