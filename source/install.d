@@ -18,7 +18,7 @@ void YPM_Install(string[] args) {
 	auto project = readText("ypm.json").parseJSON();
 
 	if (args[0].startsWith("http")) {
-		writeln("Installing library %s", baseName(args[0]));
+		writefln("Installing library %s", baseName(args[0]));
 		
 		auto res = executeShell(
 			format("git clone %s .ypm/%s", args[0], baseName(args[0]))

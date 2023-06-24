@@ -2,8 +2,10 @@ module ypm.upgrade;
 
 import std.file;
 import std.json;
+import std.path;
 import std.stdio;
 import std.format;
+import std.process;
 import std.net.curl;
 import core.stdc.stdlib;
 
@@ -14,6 +16,8 @@ void YPM_Upgrade(string[] args) {
 	}
 
 	JSONValue project = readText("ypm.json").parseJSON();
+
+	writefln("Upgrading project %s", project["name"].str);
 
 	writefln("Downloading core...");
 	bool success = true;
@@ -49,4 +53,19 @@ void YPM_Upgrade(string[] args) {
 	url = "https://raw.githubusercontent.com/ysl-c/std/main/std.ysl";
 	std.file.write(".ypm/std.ysl", get(url));
 	writeln("Done");
+
+	foreach (ref dependency ; project["libs"].array) {
+		auto path = format(".ypm/%s", baseName(dependency.str));
+	
+		auto upgradeCommand = format(
+			"cd %s && git pull && ypm upgrade", path
+		);
+
+		auto res = executeShell(upgradeCommand);
+
+		if (res.status != 0) {
+			stderr.writeln(res.output);
+			stderr.writefln("Upgrade of package '%s' failed", project["name"].str);
+		}
+	}
 }
