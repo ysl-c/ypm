@@ -16,7 +16,7 @@ const string exampleMain =
 func main
 	local string msg \"Hello World\"
 	putstr &msg
-endf
+endfunc
 ";
 
 void YPM_Init(string[] args) {
