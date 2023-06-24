@@ -56,6 +56,13 @@ void YPM_Upgrade(string[] args) {
 
 	foreach (ref dependency ; project["libs"].array) {
 		auto path = format(".ypm/%s", baseName(dependency.str));
+
+		if (!exists(path)) {
+			auto res = executeShell(
+				format("cd .ypm && git clone %s", dependency.str)
+			);
+			continue;
+		}
 	
 		auto upgradeCommand = format(
 			"cd %s && git pull && ypm upgrade", path
